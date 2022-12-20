@@ -1,9 +1,10 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { redirect } from 'react-router-dom';
 import '../App.css';
 
 export function SignUp() {
-  const REGISTER_URL = 'http://127.0.0.1:4445/api/cypher/register';
+  const REGISTER_URL = '/api/cypher/register';
   const confirmMessage = 'Successfully signed up!';
 
   const [email, setEmail] = useState<string>('');

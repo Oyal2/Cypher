@@ -20,7 +20,7 @@ export function DropDown(props: DropDownProps): JSX.Element {
             <a
               key={logo.company}
               className="dropdownSelects"
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 setCompanyValue(logo.company);
                 setShowOptions(false);
                 profilePicChange(logo.asset);
@@ -47,7 +47,7 @@ export function DropDown(props: DropDownProps): JSX.Element {
               <a
                 key={word}
                 className="dropdownSelects"
-                onClick={() => {
+                onMouseDown={() => {
                   setCompanyValue(event.target.value);
                   setShowOptions(false);
                   profilePicChange(logo.asset);
@@ -67,7 +67,7 @@ export function DropDown(props: DropDownProps): JSX.Element {
             <a
               key={logo.company}
               className="dropdownSelects"
-              onClick={(e) => {
+              onMouseDown={(e) => {
                 setCompanyValue(logo.company);
                 setShowOptions(false);
                 e.stopPropagation();
@@ -105,9 +105,12 @@ export function DropDown(props: DropDownProps): JSX.Element {
             onClick={() => {
               setShowOptions(true);
             }}
+            onBlur={() => {
+              setShowOptions(false);
+            }}
             value={companyValue}
           />
-          {showOptions && options}
+          <div>{showOptions && options}</div>
         </div>
       </div>
     </>

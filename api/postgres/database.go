@@ -28,6 +28,10 @@ type ProfileCard struct {
 	Company  string `json:"company"`
 }
 
+type DeleteCard struct {
+	Index int `json:"index"`
+}
+
 func ConnectToDB() *sql.DB {
 	// Connect to database
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -48,6 +52,7 @@ func UserExists(user string, email string, db *sql.DB) (bool, error) {
 	}
 	return rows.Next(), nil
 }
+
 func FetchProfiles(email, kek string, db *sql.DB) (arr []string, err error) {
 	query := fmt.Sprintf(`SELECT * FROM profiles WHERE email = '%s';`, email)
 	rows, err := db.Query(query)
@@ -251,6 +256,41 @@ func AddProfile(profile *ProfileCard, dek, email string, db *sql.DB) error {
 	}
 
 	query := fmt.Sprintf(`update profiles SET info = array_append(info,'%s') where email = '%s';`, encData, email)
+	rows, err := db.Query(query)
+	defer rows.Close()
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}
+
+func DeleteProfile(index int, email string, db *sql.DB) error {
+	query := fmt.Sprintf(`
+		do $$
+		declare
+		   infoArr text[];
+		   index integer := %d;
+		begin
+		   select info
+		   into infoArr
+		   FROM profiles WHERE email = '%s';
+		
+		   if array_length(infoArr,1) = 1 and index = 0 then
+			  update profiles SET info = '{}' where email = '%s';
+		   elsif array_length(infoArr,1) > 0 then 
+			  if index = 0 then
+				  update profiles SET info = info[2:] where email = '%s';
+			  elsif index = array_length(infoArr,1) - 1 then
+				  update profiles SET info = info[:array_length(infoArr,1)-1] where email = '%s';
+			  else
+				  update profiles SET info = info[:index] || info[index+2:] where email = '%s';
+			  end if;
+		   end if;
+			  
+		end; $$;
+`, index, email,email,email,email,email)
 	rows, err := db.Query(query)
 	defer rows.Close()
 	if err != nil {

@@ -1,11 +1,9 @@
 import React from 'react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { JsxElement } from 'typescript';
-import { Cookies, getCookie } from 'typescript-cookie';
+import { Cookies } from 'typescript-cookie';
 import { CreationProfile } from '../components/CreationModal';
-import { DropDown } from '../components/Dropdown';
 import '../home.css';
-import { DEFAULT_LOGO, findLogo } from '../util/images';
+import { findLogo } from '../util/images';
 
 export interface Profile {
   username: string;
@@ -43,19 +41,47 @@ export function Home() {
 
     if (resp.status === 200) {
       const jsonResp = await resp.json();
-      const profiles: Profile[] = [];
-      for (const profile of jsonResp) {
-        const jsonProfile = JSON.parse(profile);
-        console.log(jsonProfile.company);
-        profiles.push({
-          username: jsonProfile.username,
-          password: jsonProfile.password,
-          company: jsonProfile.company,
-          logo: findLogo(jsonProfile.company),
-        });
-      }
+      if (jsonResp) {
+        const profiles: Profile[] = [];
+        for (const profile of jsonResp) {
+          const jsonProfile = JSON.parse(profile);
+          profiles.push({
+            username: jsonProfile.username,
+            password: jsonProfile.password,
+            company: jsonProfile.company,
+            logo: findLogo(jsonProfile.company),
+          });
+        }
 
-      setProfileCardInfo(profiles);
+        setProfileCardInfo(profiles);
+      }
+      return true;
+    }
+
+    return false;
+  };
+
+  const deleteCard = async function (index: number): Promise<boolean> {
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Content-Type': 'application/json',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-GPC': '1',
+      },
+      body: JSON.stringify({ index: index }),
+    };
+
+    const resp: Response = await fetch('/api/cypher/delete_card', options);
+
+    if (resp.status === 200) {
+      let cards = profileCards;
+      cards = cards.slice(0, index).concat(cards.slice(index + 1));
+      setProfileCardInfo(cards);
       return true;
     }
 
@@ -78,40 +104,7 @@ export function Home() {
     }
   }, []);
 
-  useMemo(() => {
-    const reactNodes: ReactNode[] = [];
-    for (let i = 0; i < profileCards.length; i += DISPLAY_COUNT) {
-      reactNodes.push(
-        <div className="profileRow">
-          {profileCards.slice(i, i + DISPLAY_COUNT).map((item) => {
-            return (
-              <div className="profileCard">
-                <img src={item.logo} alt="" />
-                <h3>{item.company}</h3>
-                <h4>{item.username}</h4>
-                <h5
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    createProfileModal({
-                      company: item.company,
-                      password: item.password,
-                      username: item.username,
-                      logo: item.logo,
-                    });
-                  }}
-                >
-                  More Info
-                </h5>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-    setDisplay(reactNodes);
-  }, [profileCards]);
-
-  const createProfileModal = function (profile: Profile) {
+  const createProfileModal = function (profile: Profile, index: number) {
     setModal(
       <div>
         <div
@@ -142,12 +135,58 @@ export function Home() {
           </div>
           <div className="button_modal_group">
             <button className="profile_button">Edit Profile</button>
-            <button className="profile_button">Delete Profile</button>
+            <button
+              className="profile_button"
+              onClick={async () => {
+                if (await deleteCard(index)) {
+                  setModal(null);
+                }
+              }}
+            >
+              Delete Profile
+            </button>
           </div>
         </div>
       </div>
     );
   };
+
+  useMemo(() => {
+    const reactNodes: ReactNode[] = [];
+    for (let i = 0; i < profileCards.length; i += DISPLAY_COUNT) {
+      reactNodes.push(
+        <div className="profileRow">
+          {profileCards.slice(i, i + DISPLAY_COUNT).map((item, index) => {
+            const key = i * DISPLAY_COUNT + index;
+            return (
+              <div className="profileCard" key={key}>
+                <img src={item.logo} alt="" />
+                <h3>{item.company}</h3>
+                <h4>{item.username}</h4>
+                <h5
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    createProfileModal(
+                      {
+                        company: item.company,
+                        password: item.password,
+                        username: item.username,
+                        logo: item.logo,
+                      },
+                      key
+                    );
+                  }}
+                >
+                  More Info
+                </h5>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+    setDisplay(reactNodes);
+  }, [profileCards]);
 
   const createProfilePageModal = function () {
     setModal(

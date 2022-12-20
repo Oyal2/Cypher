@@ -161,7 +161,6 @@ func main() {
 			c.Status(fiber.StatusForbidden)
 			return nil
 		}
-		fmt.Println("verify")
 		dek,err := postgres.FetchDEK(email,kek,db)
 
 		if err != nil {
@@ -175,6 +174,36 @@ func main() {
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
 		fmt.Println("enc")
+
+		c.SendStatus(200)
+		return c.JSON(ErrorResponse{Error: ""})
+	})
+
+	api.Post("/delete_card", func(c *fiber.Ctx) error {
+		c.Accepts("application/json")
+		deleteCard := new(postgres.DeleteCard)
+		deleteCard.Index = -1
+		if err := c.BodyParser(deleteCard); err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
+
+		if deleteCard.Index == -1 {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: "missing information"})
+		}
+
+		email, kek := verify(c,db)
+		if len(email) == 0 || len(kek)  == 0{
+			c.Status(fiber.StatusForbidden)
+			return nil
+		}
+
+		err = postgres.DeleteProfile(deleteCard.Index,email,db)
+		if err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
 
 		c.SendStatus(200)
 		return c.JSON(ErrorResponse{Error: ""})

@@ -62,7 +62,6 @@ export function CreationProfile(props: CreateModal) {
         }
       })
       .catch((err) => console.error(err));
-    return true;
   }
 
   return (
