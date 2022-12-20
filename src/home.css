@@ -1,0 +1,321 @@
+
+.top-nav{
+    top: 0;
+    position: fixed;
+    width: 96%;
+    padding: 1.0vh 2vw;
+    font-size: 1.4vw;
+    color: white;
+    background-color: #AA0303;
+    display: flex;
+    align-items: flex-end;
+    z-index: 1;
+}
+
+.menu {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  justify-content: flex-end;
+  float:right;
+  margin-bottom: .5vh;
+}
+
+.menu > a {
+    font-weight: 500;
+    font-size: larger;
+    margin-right: 1vw;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 0px;
+}
+
+.menu > h3 {
+    font-size: 10px !important; 
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 7vh;
+    width: 100%;
+    padding: 2vh 2vw;
+    background-color: #2A2D2A;
+}
+
+.button {
+    position: relative;
+    background-color: #AA0303;
+    border: 3px solid white;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    font-family: 'Nunito Sans', sans-serif;
+    display: inline-block;
+    font-size: 1vw;
+    margin-right: 1vw;
+    cursor: pointer;
+}
+  
+.button:hover {
+    background-color: #ffffff;
+    color: #AA0303;
+    margin-bottom: 5%;
+    background-color: #ffffff;
+    border: 3px solid #AA0303;
+}
+
+.profileMenu {
+    background-color: #3D3F40;
+    width: auto;
+    padding:  15vh  6vw 0 6vw;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    min-height:85vh;
+}
+
+.profileMenu::-webkit-scrollbar {
+  display: none;
+}
+
+
+.profileRow {
+    display: flex;
+    margin-bottom: 10vh;
+}
+
+.profileRow > div {
+    margin-right: 25vh;
+}
+
+.profileCard {
+    background-color: #D9D9D9;
+    width: 26vh;
+    height: 22vh;
+    border-radius: 15%;
+    flex-direction: column;
+    display: flex;
+    padding: 2vh 0;
+    align-items: center;
+}
+
+.profileCard > img {
+    background-color: white;
+    width: 11vh;
+    height: 11vh;
+    border-radius: 50%;
+}
+
+.profileCard > h3 {
+    color: black;
+    font-size: 2.5vh;
+    margin-top: 2vh;
+}
+
+.profileCard > h4 {
+    color: black;
+    font-size: 2vh;
+    font-weight: lighter;
+    margin-top: .5vh;
+}
+
+.profileCard > h5 {
+    color: black;
+    font-size: 1.8vh;
+    font-weight: lighter;
+    margin-top: .2vh;
+    margin-left: 0;
+}
+
+.profileCard:last-child {
+    margin-right: 0;
+}
+
+.modal-container {
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: .8;
+    z-index: 9998;
+}
+
+.modal {
+    border-radius: 8%;
+    position: fixed;
+    width: 40vh;
+    height: 45vh;
+    opacity: 1;
+    background-color: #D9D9D9;
+    z-index: 9999;
+    top: 50%; 
+    right: 50%;
+    transform: translate(50%,-60%);
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    padding: 3vh 4vh 3vh 4vh;
+}
+
+.modal_close {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    font-size: 3vh;
+    margin-left: auto;
+    color: gray;
+    cursor: pointer;
+    font-weight: 750;
+    margin: -1.5vh 0 0 41vh;
+}
+
+.modal_close:hover {
+    color: black;
+}
+
+.modal > img{
+    background-color: white;
+    width: 16vh;
+    height: 16vh;
+    border-radius: 50%;
+    /* border: solid black 2px; */
+    margin-top: 2vh;
+}
+
+.display_info > h2{
+    min-width: 15vh;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.company_modal {
+    padding-top: 1.5vh;
+    color: black;
+    font-size: 2vh;
+    margin-bottom: 3vh;
+}
+
+.display_info {
+    width: 100%;
+    color: black;
+    font-size: 2vh;
+    float: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.display_name{
+    width: 15vh;
+    margin-right: 2vh;
+}
+
+.display_text{
+    font-weight: 450;
+}
+
+.button_modal_group {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+}
+
+
+.profile_button {
+    cursor: pointer;
+    font-size: 2vh;
+    font-weight: 700;
+    background-color: #FF8787;
+    border: none;
+    height: 6vh;
+    width: 17vh;
+    border-radius: 56px;
+    margin-right: 1vh;
+    margin-left: auto;
+    transition: ease-in 100ms;
+}
+
+.profile_button:hover {
+    color: white;
+
+}
+
+.display_info > input{
+    border-radius: 0;
+    background-color: #D9D9D9;
+    border: none;
+    border-bottom: 2px solid #2A2D2A;
+    padding-top: .5vh;
+    padding-bottom: .3vh;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    font-size: 2vh;
+    width: 80%;
+    margin-left: auto;
+}
+
+.display_info > input:focus{
+    outline: none;
+    border-bottom: 2px solid red;
+}
+
+input[class='company_modal']{
+    margin-top: 1vh;
+    border-radius: 0;
+    background-color: #D9D9D9;
+    border: none;
+    border-bottom: 2px solid #2A2D2A;
+    padding-top: .5vh;
+    padding-bottom: .3vh;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    font-size: 2vh;
+    width: 50%;
+}
+
+
+input[class='company_modal']:focus{
+    outline: none;
+    border-bottom: 2px solid red;
+}
+
+#companyText {
+    background-color: #D9D9D9;
+    border: none;
+    border-bottom: 2px solid #2A2D2A;
+    width: 20vh;
+    background-image: url('./assets/images/company_icon.png');
+    background-repeat: no-repeat;
+    background-size: 3vh;
+    padding: 14px 30px 5px 4vh;
+    background-position: 0;
+}
+
+.dropdownSelects { 
+    position: relative;
+  color: black;
+  padding: 1.5vh 1vh;
+  text-decoration: none;
+  display: block;
+  background-color: #D9D9D9;
+  border-right: black solid 1px;
+  border-left: black solid 1px;
+}
+
+.dropdownSelects > img{ 
+    width: 2.3vh;
+    height: 2.3vh;
+    margin-right: 1vh;
+}
+
+.dropdownSelects:hover {
+    background-color: #FF8787;
+    transition: 100ms ease-in;
+    cursor: pointer;
+}
