@@ -65,7 +65,7 @@ export function SignUp() {
 
   useEffect(() => {
     if (response === confirmMessage) {
-      window.location.href = '/signin';
+      window.location.href = '/cypher/signin';
     }
   }, [response]);
 

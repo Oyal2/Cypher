@@ -50,7 +50,7 @@ export function SignIn() {
 
   useEffect(() => {
     if (response === confirmMessage) {
-      window.location.href = '/home';
+      window.location.href = 'cypher/home';
     }
   }, [response]);
 

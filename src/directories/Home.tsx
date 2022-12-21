@@ -74,7 +74,7 @@ export function Home() {
     const sessionid = Cookies.get('sessionid');
     console.log(sessionid);
     if (!sessionid || sessionid === '' || !verify()) {
-      window.location.href = '/';
+      window.location.href = '/cypher';
     }
   }, []);
 
