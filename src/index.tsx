@@ -4,6 +4,7 @@ import './index.css';
 import {
   BrowserRouter,
   createBrowserRouter,
+  HashRouter,
   Route,
   RouterProvider,
   Routes,
@@ -17,12 +18,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <BrowserRouter basename="/cypher">
+  <HashRouter basename="/cypher">
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/home" element={<Home />} />
     </Routes>
-  </BrowserRouter>
+  </HashRouter>
 );
