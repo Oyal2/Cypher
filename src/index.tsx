@@ -7,10 +7,6 @@ import { SignIn } from './directories/SignIn';
 import { SignUp } from './directories/SignUp';
 import { Home } from './directories/Home';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-
 const router = createBrowserRouter([
   {
     path: '/cypher',
@@ -30,4 +26,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 root.render(<RouterProvider router={router} />);
