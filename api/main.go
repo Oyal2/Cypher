@@ -5,19 +5,17 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
-	"log"
-	"time"
 )
 
-
-
 type ErrorResponse struct {
-	Error    string `json:"error"`
+	Error string `json:"error"`
 }
-
 
 func main() {
 	err := godotenv.Load("../.env")
@@ -35,8 +33,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-
-
 	api.Post("/register", func(c *fiber.Ctx) error {
 		c.Accepts("application/json")
 		accountInfo := new(postgres.AccountInfo)
@@ -45,25 +41,24 @@ func main() {
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
 
-		if accountInfo.Email  == "" || accountInfo.Password  == "" || accountInfo.Username == "" {
+		if accountInfo.Email == "" || accountInfo.Password == "" || accountInfo.Username == "" {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: "missing register information"})
 		}
 
 		//Check if user exists
-		ok,err:= postgres.UserExists(accountInfo.Username,accountInfo.Email,db)
+		ok, err := postgres.UserExists(accountInfo.Username, accountInfo.Email, db)
 
 		if ok {
 			c.Status(fiber.StatusBadRequest)
 			if err != nil {
 				return c.JSON(ErrorResponse{Error: err.Error()})
-			} else{
+			} else {
 				return c.JSON(ErrorResponse{Error: "That username or email already exists"})
 			}
 		}
-		fmt.Println("User checked")
 		//Register User
-		err = postgres.RegisterUser(accountInfo,db)
+		err = postgres.RegisterUser(accountInfo, db)
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
 			if err != nil {
@@ -82,23 +77,23 @@ func main() {
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
 
-		if accountInfo.Username  == "" || accountInfo.Password  == "" {
+		if accountInfo.Username == "" || accountInfo.Password == "" {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: "missing register information"})
 		}
 
 		//Check if user exists
-		email,err:= postgres.GetUser(accountInfo.Username,accountInfo.Password,db)
+		email, err := postgres.GetUser(accountInfo.Username, accountInfo.Password, db)
 		if len(email) == 0 {
 			c.Status(fiber.StatusBadRequest)
 			if err != nil {
 				return c.JSON(ErrorResponse{Error: err.Error()})
-			} else{
+			} else {
 				return c.JSON(ErrorResponse{Error: "That username or email already exists"})
 			}
 		}
 
-		sessionID,err:= postgres.CreateOrUpdateSessionId(email,db)
+		sessionID, err := postgres.CreateOrUpdateSessionId(email, db)
 
 		if len(sessionID) == 0 {
 			c.Status(fiber.StatusBadRequest)
@@ -110,13 +105,13 @@ func main() {
 		c.SendStatus(200)
 
 		sessionCookie := &fiber.Cookie{
-			Name: "sessionid",
-			Value: sessionID,
+			Name:    "sessionid",
+			Value:   sessionID,
 			Expires: time.Now().Add(24 * time.Hour),
 		}
 		k := &fiber.Cookie{
-			Name: "k",
-			Value: base64.StdEncoding.EncodeToString(postgres.Hash(accountInfo.Password)),
+			Name:    "k",
+			Value:   base64.StdEncoding.EncodeToString(postgres.Hash(accountInfo.Password)),
 			Expires: time.Now().Add(24 * time.Hour),
 		}
 		c.Cookie(sessionCookie)
@@ -125,13 +120,13 @@ func main() {
 	})
 
 	api.Get("/info", func(c *fiber.Ctx) error {
-		email, kek := verify(c,db)
-		if len(email) == 0 || len(kek)  == 0{
+		email, kek := verify(c, db)
+		if len(email) == 0 || len(kek) == 0 {
 			c.Status(fiber.StatusForbidden)
 			return nil
 		}
 
-		profiles, err := postgres.FetchProfiles(email,kek,db)
+		profiles, err := postgres.FetchProfiles(email, kek, db)
 
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
@@ -151,29 +146,27 @@ func main() {
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
 
-		if profile.Username  == "" || profile.Password  == "" || profile.Company == "" {
+		if profile.Username == "" || profile.Password == "" || profile.Company == "" {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: "missing information"})
 		}
 
-		email, kek := verify(c,db)
-		if len(email) == 0 || len(kek)  == 0{
+		email, kek := verify(c, db)
+		if len(email) == 0 || len(kek) == 0 {
 			c.Status(fiber.StatusForbidden)
 			return nil
 		}
-		dek,err := postgres.FetchDEK(email,kek,db)
+		dek, err := postgres.FetchDEK(email, kek, db)
 
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
-		fmt.Println("got dek")
-		err = postgres.AddProfile(profile,dek,email,db)
+		err = postgres.AddProfile(profile, dek, email, db)
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
-		fmt.Println("enc")
 
 		c.SendStatus(200)
 		return c.JSON(ErrorResponse{Error: ""})
@@ -193,13 +186,13 @@ func main() {
 			return c.JSON(ErrorResponse{Error: "missing information"})
 		}
 
-		email, kek := verify(c,db)
-		if len(email) == 0 || len(kek)  == 0{
+		email, kek := verify(c, db)
+		if len(email) == 0 || len(kek) == 0 {
 			c.Status(fiber.StatusForbidden)
 			return nil
 		}
 
-		err = postgres.DeleteProfile(deleteCard.Index,email,db)
+		err = postgres.DeleteProfile(deleteCard.Index, email, db)
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: err.Error()})
@@ -218,18 +211,18 @@ func main() {
 			return c.JSON(ErrorResponse{Error: err.Error()})
 		}
 
-		if editCard.Username  == "" || editCard.Password  == "" || editCard.Company == "" || editCard.Index == -1 {
+		if editCard.Username == "" || editCard.Password == "" || editCard.Company == "" || editCard.Index == -1 {
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(ErrorResponse{Error: "missing information"})
 		}
 
-		email, kek := verify(c,db)
-		if len(email) == 0 || len(kek)  == 0{
+		email, kek := verify(c, db)
+		if len(email) == 0 || len(kek) == 0 {
 			c.Status(fiber.StatusForbidden)
 			return nil
 		}
 
-		dek,err := postgres.FetchDEK(email,kek,db)
+		dek, err := postgres.FetchDEK(email, kek, db)
 
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
@@ -240,7 +233,7 @@ func main() {
 			Username: editCard.Username,
 			Password: editCard.Password,
 			Company:  editCard.Company,
-		},editCard.Index,email,dek,db)
+		}, editCard.Index, email, dek, db)
 
 		if err != nil {
 			c.Status(fiber.StatusBadRequest)
@@ -256,29 +249,29 @@ func main() {
 	app.Listen(":4445")
 }
 
-func verify(c *fiber.Ctx,db *sql.DB) (string,string) {
+func verify(c *fiber.Ctx, db *sql.DB) (string, string) {
 	sessionID := c.Cookies("sessionid")
 	kek := c.Cookies("k")
-	if len(kek) == 0 || len(sessionID) == 0{
+	if len(kek) == 0 || len(sessionID) == 0 {
 		c.ClearCookie("sessionid")
 		c.ClearCookie("k")
 		c.Status(fiber.StatusForbidden)
 		c.JSON(ErrorResponse{Error: "invalid credentials"})
-		return "",""
+		return "", ""
 	}
 
-	email,err := postgres.FindSessionId(sessionID,db)
+	email, err := postgres.FindSessionId(sessionID, db)
 
 	if len(email) == 0 {
 		c.Status(fiber.StatusBadRequest)
 		if err != nil {
 			c.JSON(ErrorResponse{Error: err.Error()})
-			return "",""
-		} else{
+			return "", ""
+		} else {
 			c.JSON(ErrorResponse{Error: "session is not found"})
-			return "",""
+			return "", ""
 		}
 	}
 
-	return email,kek
+	return email, kek
 }

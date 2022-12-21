@@ -257,7 +257,6 @@ func AddProfile(profile *ProfileCard, dek, email string, db *sql.DB) error {
 		return err
 	}
 
-	fmt.Println(dek)
 	encData, err := Encryption(string(profileJson), []byte(dek))
 	if err != nil {
 		log.Fatal(err)
@@ -317,7 +316,6 @@ func EditProfile(profile *ProfileCard,index int, email,dek string, db *sql.DB) e
 		return err
 	}
 
-	fmt.Println(dek)
 	encData, err := Encryption(string(profileJson), []byte(dek))
 	if err != nil {
 		log.Fatal(err)
