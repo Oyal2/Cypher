@@ -13,19 +13,19 @@ const root = ReactDOM.createRoot(
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/cypher',
     element: <HomePage />,
   },
   {
-    path: '/signin',
+    path: '/cypher/signin',
     element: <SignIn />,
   },
   {
-    path: '/signup',
+    path: '/cypher/signup',
     element: <SignUp />,
   },
   {
-    path: '/home',
+    path: '/cypher/home',
     element: <Home />,
   },
 ]);
