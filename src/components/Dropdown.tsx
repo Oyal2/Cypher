@@ -4,13 +4,16 @@ import { DEFAULT_LOGO, LOGOS } from '../util/images';
 interface DropDownProps {
   setCompanyValue: React.Dispatch<React.SetStateAction<string>>;
   companyValue: string;
+  companyPic?: any;
 }
 
 export function DropDown(props: DropDownProps): JSX.Element {
-  const { setCompanyValue, companyValue } = props;
+  const { setCompanyValue, companyValue, companyPic } = props;
   const [options, setOptions] = React.useState<ReactNode[]>();
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
-  const [profileCompany, profilePicChange] = React.useState(DEFAULT_LOGO);
+  const [profileCompany, profilePicChange] = React.useState(
+    companyPic == null ? DEFAULT_LOGO : companyPic
+  );
 
   React.useEffect(() => {
     setOptions(

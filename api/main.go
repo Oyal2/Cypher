@@ -209,6 +209,48 @@ func main() {
 		return c.JSON(ErrorResponse{Error: ""})
 	})
 
+	api.Post("/edit_card", func(c *fiber.Ctx) error {
+		c.Accepts("application/json")
+		editCard := new(postgres.ProfileCardIndex)
+		editCard.Index = -1
+		if err := c.BodyParser(editCard); err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
+
+		if editCard.Username  == "" || editCard.Password  == "" || editCard.Company == "" || editCard.Index == -1 {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: "missing information"})
+		}
+
+		email, kek := verify(c,db)
+		if len(email) == 0 || len(kek)  == 0{
+			c.Status(fiber.StatusForbidden)
+			return nil
+		}
+
+		dek,err := postgres.FetchDEK(email,kek,db)
+
+		if err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
+
+		err = postgres.EditProfile(&postgres.ProfileCard{
+			Username: editCard.Username,
+			Password: editCard.Password,
+			Company:  editCard.Company,
+		},editCard.Index,email,dek,db)
+
+		if err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
+
+		c.SendStatus(200)
+		return c.JSON(ErrorResponse{Error: ""})
+	})
+
 	fmt.Println("Connected!")
 
 	app.Listen(":4445")

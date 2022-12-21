@@ -2,6 +2,7 @@ import React from 'react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Cookies } from 'typescript-cookie';
 import { CreationProfile } from '../components/CreationModal';
+import { ViewProfileModal } from '../components/ViewProfileModal';
 import '../home.css';
 import { findLogo } from '../util/images';
 
@@ -61,33 +62,6 @@ export function Home() {
     return false;
   };
 
-  const deleteCard = async function (index: number): Promise<boolean> {
-    const options = {
-      method: 'POST',
-      headers: {
-        Accept: '*/*',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Content-Type': 'application/json',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-GPC': '1',
-      },
-      body: JSON.stringify({ index: index }),
-    };
-
-    const resp: Response = await fetch('/api/cypher/delete_card', options);
-
-    if (resp.status === 200) {
-      let cards = profileCards;
-      cards = cards.slice(0, index).concat(cards.slice(index + 1));
-      setProfileCardInfo(cards);
-      return true;
-    }
-
-    return false;
-  };
-
   useEffect(() => {
     if (modal) {
       document.body.style.overflow = 'hidden';
@@ -106,52 +80,19 @@ export function Home() {
 
   const createProfileModal = function (profile: Profile, index: number) {
     setModal(
-      <div>
-        <div
-          className="modal-container"
-          onClick={() => {
-            setModal(null);
-          }}
-        />
-        <div className="modal">
-          <button className="modal_close">
-            <a
-              onClick={() => {
-                setModal(null);
-              }}
-            >
-              X
-            </a>
-          </button>
-          <img src={profile.logo} alt="" />
-          <h3 className="company_modal">{profile.company}</h3>
-          <div className="display_info">
-            <h2 className="display_name">Username</h2>
-            <h2 className="display_text">{profile.username}</h2>
-          </div>
-          <div className="display_info">
-            <h2 className="display_name">Password</h2>
-            <h2 className="display_text">{profile.password}</h2>
-          </div>
-          <div className="button_modal_group">
-            <button className="profile_button">Edit Profile</button>
-            <button
-              className="profile_button"
-              onClick={async () => {
-                if (await deleteCard(index)) {
-                  setModal(null);
-                }
-              }}
-            >
-              Delete Profile
-            </button>
-          </div>
-        </div>
-      </div>
+      <ViewProfileModal
+        setModal={setModal}
+        profileCards={profileCards}
+        setProfileCardInfo={setProfileCardInfo}
+        profileInfo={{
+          profile: profile,
+          index: index,
+        }}
+      />
     );
   };
 
-  useMemo(() => {
+  useEffect(() => {
     const reactNodes: ReactNode[] = [];
     for (let i = 0; i < profileCards.length; i += DISPLAY_COUNT) {
       reactNodes.push(
