@@ -142,7 +142,7 @@ export function SignUp() {
           <h5>
             <a
               style={{ color: '#0c1c4a', float: 'right' }}
-              href="/forgotPassword"
+              href="/cypher/forgotPassword"
             >
               Forgot Password!
             </a>
@@ -154,7 +154,7 @@ export function SignUp() {
           </div>
         </form>
         <div className="btn-group" style={{ marginTop: '3vh' }}>
-          <a href="/signin">
+          <a href="/cypher/signin">
             <button className="button">Existing User: Sign In</button>
           </a>
         </div>

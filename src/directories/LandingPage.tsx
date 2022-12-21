@@ -11,10 +11,10 @@ export function HomePage() {
         <h3>Protection to a New Level</h3>
       </div>
       <div className="btn-group">
-        <a href="/signin">
+        <a href="/cypher/signin">
           <button className="button">Sign In</button>
         </a>
-        <a href="/signup">
+        <a href="/cypher/signup">
           <button className="button">Sign Up</button>
         </a>
       </div>

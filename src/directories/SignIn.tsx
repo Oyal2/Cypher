@@ -50,7 +50,7 @@ export function SignIn() {
 
   useEffect(() => {
     if (response === confirmMessage) {
-      window.location.href = 'cypher/home';
+      window.location.href = '/cypher/home';
     }
   }, [response]);
 
@@ -94,7 +94,7 @@ export function SignIn() {
           <h5>
             <a
               style={{ color: '#0c1c4a', float: 'right' }}
-              href="/forgotPassword"
+              href="/cypher/forgotPassword"
             >
               Forgot Password!
             </a>
@@ -104,7 +104,7 @@ export function SignIn() {
           </div>
         </form>
         <div className="btn-group" style={{ marginTop: '3vh' }}>
-          <a href="/signup">
+          <a href="/cypher/signup">
             <button className="button">New User: Sign Up</button>
           </a>
         </div>
