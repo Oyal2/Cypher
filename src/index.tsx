@@ -17,12 +17,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/cypher">
     <Routes>
-      <Route path="/cypher" element={<HomePage />} />
-      <Route path="/cypher/signin" element={<SignIn />} />
-      <Route path="/cypher/signup" element={<SignUp />} />
-      <Route path="/cypher/home" element={<Home />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/home" element={<Home />} />
     </Routes>
   </BrowserRouter>
 );
