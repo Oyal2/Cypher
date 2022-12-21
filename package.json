@@ -1,9 +1,8 @@
 {
-  "homepage": "./",
+  "homepage": "https://oyal2.com/cypher",
   "name": "cypher",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:4445",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
