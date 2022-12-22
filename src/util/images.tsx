@@ -1,4 +1,5 @@
 export const DEFAULT_LOGO = require('../assets/images/default_company.png');
+export const CYPHER_LOGO = require('../assets/images/cypher_logo.png');
 
 export interface logoAssets {
   company: string;

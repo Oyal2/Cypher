@@ -13,7 +13,7 @@ import { SignIn } from './directories/SignIn';
 import { SignUp } from './directories/SignUp';
 import { Home } from './directories/Home';
 import { Settings } from './directories/Settings';
-
+ 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
