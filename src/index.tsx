@@ -12,6 +12,7 @@ import { HomePage } from './directories/LandingPage';
 import { SignIn } from './directories/SignIn';
 import { SignUp } from './directories/SignUp';
 import { Home } from './directories/Home';
+import { Settings } from './directories/Settings';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,6 +24,7 @@ root.render(
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/settings" element={<Settings />} />
     </Routes>
   </BrowserRouter>
 );

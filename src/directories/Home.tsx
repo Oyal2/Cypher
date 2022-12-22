@@ -71,11 +71,15 @@ export function Home() {
   }, [modal]);
 
   useEffect(() => {
-    const sessionid = Cookies.get('sessionid');
-    console.log(sessionid);
-    if (!sessionid || sessionid === '' || !verify()) {
-      window.location.href = '/cypher';
+    async function check() {
+      const sessionid = Cookies.get('sessionid');
+      console.log(sessionid);
+      console.log(verify());
+      if (!sessionid || sessionid === '' || !(await verify())) {
+        window.location.href = '/cypher/signin';
+      }
     }
+    check();
   }, []);
 
   const createProfileModal = function (profile: Profile, index: number) {
@@ -144,7 +148,7 @@ export function Home() {
       <div className="top-nav">
         <h1 style={{ margin: '0 0px', fontSize: '2.5vw' }}>CYPHER</h1>
         <div className="menu">
-          <a href="safetyinformation.html">Settings</a>
+          <a href="/cypher/settings">Settings</a>
           <a
             onClick={() => {
               var allCookies = document.cookie.split(';');

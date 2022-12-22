@@ -32,10 +32,8 @@ type ProfileCardIndex struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Company  string `json:"company"`
-	Index 	 int	`json:"index"`
+	Index    int    `json:"index"`
 }
-
-
 
 type DeleteCard struct {
 	Index int `json:"index"`
@@ -298,7 +296,7 @@ func DeleteProfile(index int, email string, db *sql.DB) error {
 		   end if;
 			  
 		end; $$;
-`, index, email,email,email,email,email)
+`, index, email, email, email, email, email)
 	rows, err := db.Query(query)
 	defer rows.Close()
 	if err != nil {
@@ -309,7 +307,7 @@ func DeleteProfile(index int, email string, db *sql.DB) error {
 	return nil
 }
 
-func EditProfile(profile *ProfileCard,index int, email,dek string, db *sql.DB) error {
+func EditProfile(profile *ProfileCard, index int, email, dek string, db *sql.DB) error {
 	profileJson, err := json.Marshal(profile)
 	if err != nil {
 		log.Fatal(err)
@@ -321,8 +319,27 @@ func EditProfile(profile *ProfileCard,index int, email,dek string, db *sql.DB) e
 		log.Fatal(err)
 		return err
 	}
-	query := fmt.Sprintf(`update profiles SET info[%d] = '%s' where email = '%s';`,index+1, encData, email)
+	query := fmt.Sprintf(`update profiles SET info[%d] = '%s' where email = '%s';`, index+1, encData, email)
 
+	rows, err := db.Query(query)
+	defer rows.Close()
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}
+
+func DeleteAccount(email string, db *sql.DB) error {
+	query := fmt.Sprintf(`
+	BEGIN;
+	delete from profiles where email = '%s';
+	delete from accounts where email = '%s';
+	delete from user_sessions where email = '%s';
+	COMMIT;
+
+	`,email,email,email)
 	rows, err := db.Query(query)
 	defer rows.Close()
 	if err != nil {

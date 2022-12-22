@@ -192,3 +192,16 @@ input[type=password] {
 input[type=password]:focus {
     border: 4px solid #AA0303;
 }
+
+.background {
+    width: 100%;
+    height: 91vh;
+    background-color: #3D3F40;
+}
+
+.toastbuttons {
+    border-radius: '15px';
+    font-size: 'large';
+    padding: '1vh 2vh';
+    margin-right: '2vh';
+}

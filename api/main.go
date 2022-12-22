@@ -244,6 +244,26 @@ func main() {
 		return c.JSON(ErrorResponse{Error: ""})
 	})
 
+	api.Post("/delete_account", func(c *fiber.Ctx) error {
+		email, kek := verify(c, db)
+		if len(email) == 0 || len(kek) == 0 {
+			c.Status(fiber.StatusForbidden)
+			return nil
+		}
+
+		err := postgres.DeleteAccount(email,db)
+
+		if err != nil {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(ErrorResponse{Error: err.Error()})
+		}
+
+		c.ClearCookie("sessionid")
+		c.ClearCookie("k")
+		c.SendStatus(200)
+		return c.JSON(ErrorResponse{Error: ""})
+	})
+
 	fmt.Println("Connected!")
 
 	app.Listen(":4445")

@@ -8,12 +8,13 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/mergermarket/go-pkcs7"
-	"golang.org/x/crypto/bcrypt"
-	"golang.org/x/crypto/pbkdf2"
 	"io"
 	"log"
 	"os"
+
+	"github.com/mergermarket/go-pkcs7"
+	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 var SecretKey = os.Getenv("SECRET_KEY")
@@ -47,7 +48,7 @@ func Encryption(plaintext string, ckey []byte) (string, error) {
 	return base64.StdEncoding.EncodeToString(cipherText), nil
 }
 
-func Decryption(encrypted string, ckey []byte , isBase64 bool) (string, error) {
+func Decryption(encrypted string, ckey []byte, isBase64 bool) (string, error) {
 	key := []byte(ckey)
 	var cipherText []byte
 	if isBase64 {
@@ -78,18 +79,18 @@ func Decryption(encrypted string, ckey []byte , isBase64 bool) (string, error) {
 	return fmt.Sprintf("%s", cipherText), nil
 }
 
-func HashPassword(password string) (string,error){
+func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
 }
 
-func CheckPasswordHash(password, hash , salt string) bool {
+func CheckPasswordHash(password, hash, salt string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
 
-func Hash(password string) []byte{
-	dk := pbkdf2.Key([]byte(password),  []byte(SecretKey), 4096, 32, sha1.New)
+func Hash(password string) []byte {
+	dk := pbkdf2.Key([]byte(password), []byte(SecretKey), 4096, 32, sha1.New)
 	return dk
 }
 
