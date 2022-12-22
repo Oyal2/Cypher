@@ -23,9 +23,9 @@
 - [💡 Features](#-features)
 - [💭 How it works ](#-how-it-works-)
   - [Encryption](#encryption)
-      - [Figure of the Private Data Encryption Protocol](#figure-of-the-private-data-encryption-protocol)
       - [Figure of the Key Encryption Key Protocol](#figure-of-the-key-encryption-key-protocol)
       - [Figure of the Decryption Encryption Key Encrypt Protocol](#figure-of-the-decryption-encryption-key-encrypt-protocol)
+      - [Figure of the Private Data Encryption Protocol](#figure-of-the-private-data-encryption-protocol)
   - [Session Id](#session-id)
   - [Delete Account](#delete-account)
 - [⛏️ Built Using ](#️-built-using-)
@@ -58,14 +58,16 @@ We hash and salt our user's account password with bcrypt. The salt for the hash 
 This application takes private data very securely and goes through extreme measures to protect a user's data. In order for this security protocol to work we need to have two encryption keys. One encryption key, `Decryption Encryption Key (DEK)`, is used to encrypt the user's accounts that are saved in cypher. The DEK is a random UUIDv4 and is unique to each cypher user. Another encrpytion key, `Key Encrpytion Key (KEK)`, is used to encrypt the `decryption key (DEK)`, so an attacker cant breach our database and use the DEK to decrpyt the personal data. The KEK is created by hashing the user's plain-text password and salting it with cypher's master password, which is set in the .env file. The key derivation function that is used is `pbkdf2`.
 
 Here are some images of the protocols:
- <img width=auto height=auto src="https://user-images.githubusercontent.com/13637813/209083262-4c90683b-0933-4e3b-82f2-22f4ecc2345f.png" alt="Private Data Encryption Protocol"></a>
-##### Figure of the Private Data Encryption Protocol
+
 
  <img width=auto height=auto src="https://user-images.githubusercontent.com/13637813/209087084-40d5bdab-4fe4-403e-88f0-f8d69aa149dc.png" alt="Private Data Encryption Protocol"></a>
 ##### Figure of the Key Encryption Key Protocol
 
  <img width=auto height=auto src="https://user-images.githubusercontent.com/13637813/209088233-8bf323bd-f432-4fcb-9cbb-ae0eb4c04c28.png" alt="Private Data Encryption Protocol"></a>
 ##### Figure of the Decryption Encryption Key Encrypt Protocol
+
+ <img width=auto height=auto src="https://user-images.githubusercontent.com/13637813/209083262-4c90683b-0933-4e3b-82f2-22f4ecc2345f.png" alt="Private Data Encryption Protocol"></a>
+##### Figure of the Private Data Encryption Protocol
 
 ### Session Id
 In order to gain access to user api calls a user must have a valid `sessionID` and `K (Key Encryption Key)` cookie. Both are checked for authentication and if both information does not match up you are denied calls about the user's information and homepage. 
